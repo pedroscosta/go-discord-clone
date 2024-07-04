@@ -1,0 +1,56 @@
+<div class="w-full h-screen flex flex-col gap-12 items-center justify-center">
+  <h1 class="text-3xl font-bold">Login</h1>
+  <form class="w-full max-w-md" method="POST" action="/login">
+    <div class="mt-4">
+      <label for="username" class="block text-sm font-medium text-gray-400"
+        >Username</label
+      >
+      <div class="mt-1">
+        <input
+          id="username"
+          name="username"
+          autocomplete="username"
+          required
+          class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-black"
+        />
+      </div>
+    </div>
+    <div class="mt-6">
+      <label for="password" class="block text-sm font-medium text-gray-400"
+        >Password</label
+      >
+      <div class="mt-1">
+        <input
+          id="password"
+          name="password"
+          type="password"
+          autocomplete="current-password"
+          required
+          class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-black"
+        />
+      </div>
+    </div>
+    <div class="mt-8">
+      <button
+        hx-post="/api/v1/auth/login"
+        hx-swap="none"
+        class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-400 hover:bg-blue-400/75 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+      >
+        Sign in
+      </button>
+      <a
+        href="/register"
+        class="flex justify-center py-2 px-4 text-sm font-medium text-blue-400 hover:text-blue-400/75 mt-2"
+      >
+        Register
+      </a>
+    </div>
+  </form>
+</div>
+<script>
+  document.addEventListener("htmx:afterRequest", (e) => {
+    document.cookie =
+      "Authorization=" + JSON.parse(e.detail.xhr.response).token;
+    document.location.href = "/";
+  });
+</script>

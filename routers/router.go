@@ -1,16 +1,20 @@
 package routers
 
 import (
-	repositories "go-discord-clone/repositories"
 	"os"
 
 	"go-discord-clone/handlers"
 
 	jwtware "github.com/gofiber/contrib/jwt"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/template/html/v2"
 )
 
-func SetupRouter(app *fiber.App) {
+func SetupRouter(app *fiber.App, engine *html.Engine) {
+	app.Get("/login", func(c *fiber.Ctx) error {
+		return c.Render("login", fiber.Map{}, "layouts/main")
+	})
+
 	api := app.Group("/api")
 	v1 := api.Group("/v1")
 
@@ -24,25 +28,4 @@ func SetupRouter(app *fiber.App) {
 		SigningKey: jwtware.SigningKey{Key: []byte(os.Getenv("JWT_SECRET"))},
 	}))
 
-	user := v1.Group("/user")
-
-	user.Get("/:username", func(c *fiber.Ctx) error {
-		user, err := repositories.GetUser(c.Params("username"))
-
-		if err != nil {
-			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": err.Error()})
-		}
-
-		return c.JSON(user)
-	})
-
-	user.Get("/", func(c *fiber.Ctx) error {
-		users, err := repositories.GetUsers()
-
-		if err != nil {
-			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": err.Error()})
-		}
-
-		return c.JSON(users)
-	})
 }
