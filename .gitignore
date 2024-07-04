@@ -1,2 +1,4 @@
 database/discord.db
 .env
+
+tmp/
